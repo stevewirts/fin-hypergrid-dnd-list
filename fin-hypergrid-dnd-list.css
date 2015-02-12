@@ -47,6 +47,8 @@
   border-bottom: 1px solid #e0e0e0;
   text-transform: capitalize;
   cursor: move;
+  background-color: white;
+  color: black;
 }
 .list li:before {
   font-size: 30px;
