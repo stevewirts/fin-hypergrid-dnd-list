@@ -14,9 +14,12 @@
 
 # usage gp Polymer core-item [branch]
 # Run in a clean directory passing in a GitHub org and repo name
-org=$1
-repo=$2
-branch=${3:-"master"} # default to master when branch isn't specified
+org="stevewirts"
+repo="fin-hypergrid-dnd-list"
+branch="master" # default to master when branch isn't specified
+
+#delete existing dir
+rm -rf $repo
 
 # make folder (same as input, no checking!)
 mkdir $repo
