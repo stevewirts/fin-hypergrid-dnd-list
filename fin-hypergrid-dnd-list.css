@@ -18,16 +18,17 @@
   justify-content: center;
   align-items: center;
   width: 90%;
-  height: 10%;
+  height: 46px;
   background-color: #00796b;
   color: white;
   margin-left: 5%;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  overflow: hidden;
 }
 .list {
   background-color: white;
   position: absolute;
-  top: 10%;
+  top: 46px;
   left: 5%;
   right: 5%;
   border: 1px solid black;
