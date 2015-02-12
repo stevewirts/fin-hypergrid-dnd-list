@@ -45,9 +45,14 @@ echo "{
 " > .bowerrc
 bower install --save $org/$repo#$branch
 
-cp -rf ../../core-component-page ./components/core-component-page
 cp -rf ../../webcomponentsjs ./components/webcomponentsjs
 cp -rf ../../polymer ./components/polymer
+cp -rf ../../NodeBind ./components/NodeBind
+cp -rf ../../TemplateBinding ./components/TemplateBinding
+cp -rf ../../URL ./components/URL
+cp -rf ../../observe-js ./components/observe-js
+cp -rf ../../polymer-expressions ./components/polymer-expressions
+cp -rf ../../polymer-gestures ./components/polymer-gestures
 
 # redirect by default to the component folder
 echo "<META http-equiv="refresh" content=\"0;URL=components/$repo/\">" >index.html
