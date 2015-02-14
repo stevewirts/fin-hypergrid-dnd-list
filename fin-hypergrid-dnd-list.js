@@ -150,7 +150,7 @@
             //li.classList.add('level3');
             li.style.width = parentBounds.width + 'px';
             if (this.dragFodder) {
-                this.shadowRoot.removeChild(this.dragFodder);
+                document.body.removeChild(this.dragFodder);
             }
             this.dragFodder = li;
             this.dragEventStart = [(e.x || e.clientX) - bounds.left, (e.y || e.clientY) - bounds.top];
