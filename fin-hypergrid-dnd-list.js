@@ -2,7 +2,9 @@
 'use strict';
 
 (function() {
+    var noop = function() {
 
+    };
     Polymer('fin-hypergrid-dnd-list', { /* jshint ignore:line  */
         attached: function() {
             // populate the element’s data model
@@ -71,7 +73,21 @@
             return boundries;
 
         },
-        dragHover: function(dragged, x, y) {
+
+        //I've just been dragged over this is the notification
+        handleDragHoverEnter: function(dragged, x, y) {
+            noop(dragged, x, y);
+        },
+
+        //I've just had a dragging operation leave me and
+        //begin hovering over another drag target
+        handleDragHoverExit: function(dragged, x, y) {
+            noop(dragged, x, y);
+            this.correctItemState();
+        },
+
+        //I'm being dragged over
+        handleDragOver: function(dragged, x, y) {
             var self = this;
             var bounds = this.$.ulist.getBoundingClientRect();
             //var items = this.$.ulist.querySelectorAll('li.item').array();
@@ -137,8 +153,15 @@
             this.dragFodder.style.display = 'none';
             var dropTarget = document.elementFromPoint(globalX + cxo, globalY + cyo);
             this.dragFodder.style.display = '';
-            if (dropTarget && dropTarget.dragHover) {
-                dropTarget.dragHover(this.dragFodder, globalX + cxo, globalY + cyo);
+            if (dropTarget && dropTarget.handleDragOver) {
+                if (this.currentDropTarget !== dropTarget) {
+                    if (this.currentDropTarget) {
+                        this.currentDropTarget.handleDragHoverExit(this.dragFodder, globalX + cxo, globalY + cyo);
+                    }
+                    this.currentDropTarget = dropTarget;
+                    this.currentDropTarget.handleDragHoverEnter(this.dragFodder, globalX + cxo, globalY + cyo);
+                }
+                dropTarget.handleDragOver(this.dragFodder, globalX + cxo, globalY + cyo);
             }
         },
         initiateItemDrag: function(li, e) {
@@ -191,6 +214,24 @@
             style.transform = 'translate(' + x + 'px, ' + y + 'px)';
             style.border = '1px solid #bbbbbb';
             style.boxShadow = '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)';
+        },
+
+        //I no longer have a drop prospect, correct my expansion state
+        correctItemState: function() {
+            var spacer = this.$.ulist.querySelector('li.spacer.beBig');
+            if (spacer) {
+                requestAnimationFrame(function() {
+                    spacer.classList.remove('beBig');
+                    spacer.classList.add('beSmall');
+                    spacer.classList.add('transition');
+                    //wait a little longer than the transition
+                    //and remove the spacer so as not to have
+                    //duplicate spacers
+                    setTimeout(function() {
+                        spacer.classList.remove('transition');
+                    }, 210);
+                });
+            }
         }
     });
 
