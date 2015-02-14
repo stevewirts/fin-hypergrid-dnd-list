@@ -4,7 +4,7 @@
 (function() {
 
     Polymer('fin-hypergrid-dnd-list', { /* jshint ignore:line  */
-        ready: function() {
+        attached: function() {
             // populate the element’s data model
             // (the salutations array)
             this.label = this.label || 'title';
@@ -134,7 +134,6 @@
             this.setCssLocation(this.dragFodder.style, globalX, globalY);
 
             //lets check for a drag over....
-            console.log(globalX + cxo, globalY + cyo);
             this.dragFodder.style.display = 'none';
             var dropTarget = document.elementFromPoint(globalX + cxo, globalY + cyo);
             this.dragFodder.style.display = '';
