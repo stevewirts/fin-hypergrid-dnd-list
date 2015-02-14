@@ -72,6 +72,7 @@
 
         },
         dragHover: function(dragged, x, y) {
+            var self = this;
             var bounds = this.$.ulist.getBoundingClientRect();
             //var items = this.$.ulist.querySelectorAll('li.item').array();
             var boundries = this.getRowHeights();
@@ -87,6 +88,10 @@
             }
             var overRow = minIndex;
             if (this.overRow !== overRow) {
+                if (this.isTransition) {
+                    return;
+                }
+                this.isTransition = true;
                 var spacers = this.$.ulist.querySelectorAll('li.spacer');
                 //shrink previous if it exists
                 if (this.overRow || this.overRow === 0) {
@@ -109,7 +114,8 @@
                     spacer.classList.add('beBig');
                     setTimeout(function() {
                         spacer.classList.remove('transition');
-                    }, 110);
+                        self.isTransition = false;
+                    }, 210);
                 });
             }
         },
@@ -117,16 +123,23 @@
             if (!this.dragFodder) {
                 return;
             }
-            var globalX = e.x || e.clientX;
-            var globalY = e.y || e.clientY;
+            var dragFodderRect = this.dragFodder.getBoundingClientRect();
+            var cxo = dragFodderRect.width / 2;
+            var cyo = dragFodderRect.height / 2;
+
+            var globalX = (e.x || e.clientX) - this.dragEventStart[0];
+            var globalY = (e.y || e.clientY) - this.dragEventStart[1];
             //var sx = this.dragItemStart[0];
             //var sy = this.dragItemStart[1];
             this.setCssLocation(this.dragFodder.style, globalX, globalY);
 
             //lets check for a drag over....
-            var dropTarget = document.elementFromPoint(globalX, globalY);
+            console.log(globalX + cxo, globalY + cyo);
+            this.dragFodder.style.display = 'none';
+            var dropTarget = document.elementFromPoint(globalX + cxo, globalY + cyo);
+            this.dragFodder.style.display = '';
             if (dropTarget && dropTarget.dragHover) {
-                dropTarget.dragHover(this.dragFodder, globalX, globalY);
+                dropTarget.dragHover(this.dragFodder, globalX + cxo, globalY + cyo);
             }
         },
         initiateItemDrag: function(li, e) {
@@ -135,14 +148,14 @@
             var parent = this.$.ulist;
             var bounds = li.getBoundingClientRect();
             var parentBounds = parent.getBoundingClientRect();
-            li.classList.add('level3');
+            //li.classList.add('level3');
             li.style.width = parentBounds.width + 'px';
             if (this.dragFodder) {
                 this.shadowRoot.removeChild(this.dragFodder);
             }
             this.dragFodder = li;
-            this.dragEventStart = [e.x || e.clientX, e.y || e.clientY];
-            this.dragItemStart = [bounds.left - parentBounds.left, bounds.top - parentBounds.top - 4];
+            this.dragEventStart = [(e.x || e.clientX) - bounds.left, (e.y || e.clientY) - bounds.top];
+            //this.dragItemStart = [bounds.left - parentBounds.left, bounds.top - parentBounds.top];
 
             //lets insert this guy and do a transition to
             //shrink his height
@@ -150,7 +163,6 @@
             goAwayer.classList.remove('transition');
             goAwayer.classList.add('beBig');
             document.body.appendChild(li);
-            this.setCssLocation(li.style, this.dragItemStart[0], this.dragItemStart[1]);
             PolymerGestures.addEventListener(li, 'track', function(e) {
                 self.handleDrag(e);
             });
@@ -163,13 +175,14 @@
                 //duplicate spacers
                 setTimeout(function() {
                     parent.removeChild(goAwayer);
-                }, 110);
+                }, 210);
             });
             //make the new guy generate touch events
 
         },
         setCssLocation: function(style, x, y) {
-            style.position = 'absolute';
+            style.position = 'fixed';
+            style.zIndex = 10;
             style.top = 0;
             style.left = 0;
             style.webkitTransform = 'translate(' + x + 'px, ' + y + 'px)';
