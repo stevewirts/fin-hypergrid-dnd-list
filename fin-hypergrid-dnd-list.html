@@ -10,7 +10,8 @@
         <ul id="ulist" class="font-special list" touch-action="pan-y" size="3">
           <template repeat="{{item, i in list}}">
             <li value="{{i}}_spacer" class="spacer beSmall"></li>
-            <li value="{{i}}" class="item">{{item}}</li>
+            <li value="{{i}}" class="item" style="-moz-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select:none;white-space:nowrap;line-height: 46px;list-style-type: none;font-family: 'Roboto', sans-serif;border-bottom: 1px solid #e0e0e0;text-transform: capitalize;cursor: move;background-color: white;color: black;">              <span style="font-size: 30px;color: #b6b6b6;margin: 8px;position: relative;top: 2px;cursor: move;">&#11044;</span>
+                {{item}}</li>
           </template>
             <li value="last_spacer" class="spacer beSmall"></li>
         </ul>
@@ -198,16 +199,8 @@
             style.mmsTransform = 'translate(' + x + 'px, ' + y + 'px)';
             style.oTransform = 'translate(' + x + 'px, ' + y + 'px)';
             style.transform = 'translate(' + x + 'px, ' + y + 'px)';
-
-            style.lineHeight = '46px';
-            style.listStyleType = 'none';
-            style.fontFamily = 'Roboto, sans-serif';
-            style.borderBottom = '1px solid #e0e0e0';
-            style.texttransform = 'capitalize';
-            style.cursor = 'move';
-            style.backgroundColor = 'white';
-            style.color = 'black';
-
+            style.border = '1px solid #bbbbbb';
+            style.boxShadow = '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)';
         }
     });
 

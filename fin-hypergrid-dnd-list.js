@@ -177,16 +177,8 @@
             style.mmsTransform = 'translate(' + x + 'px, ' + y + 'px)';
             style.oTransform = 'translate(' + x + 'px, ' + y + 'px)';
             style.transform = 'translate(' + x + 'px, ' + y + 'px)';
-
-            style.lineHeight = '46px';
-            style.listStyleType = 'none';
-            style.fontFamily = 'Roboto, sans-serif';
-            style.borderBottom = '1px solid #e0e0e0';
-            style.texttransform = 'capitalize';
-            style.cursor = 'move';
-            style.backgroundColor = 'white';
-            style.color = 'black';
-
+            style.border = '1px solid #bbbbbb';
+            style.boxShadow = '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)';
         }
     });
 
