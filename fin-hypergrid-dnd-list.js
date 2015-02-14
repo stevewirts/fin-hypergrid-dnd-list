@@ -168,27 +168,55 @@
         //lets notify the drop target of a drop
         //the dropItem contains it's source, dragSource
         handleDrop: function(e) {
+
             noop(e);
+
             var dropTarget = this.currentDropTarget;
             var dragFodder = this.dragFodder;
+
             dropTarget.listItemDropped(dragFodder);
         },
 
         //ive had a list item dropped on me do the proper thing
         listItemDropped: function(listItem) {
+
+            var self = this;
             var sourceList = listItem.dragSource;
 
             noop(listItem, sourceList);
             var dropSpacer = this.$.ulist.querySelector('li.spacer.beBig');
+
             var items = this.$.ulist.querySelectorAll('li').array();
-            //var sourceIndex = listItem.dragIndex;
             var sourceItem = listItem.dragItem;
             var insertIndex = items.indexOf(dropSpacer) / 2;
 
-            this.list.splice(insertIndex, 0, sourceItem);
 
-            this.correctItemState();
-            listItem.parentElement.removeChild(listItem);
+            var targetRect = dropSpacer.getBoundingClientRect();
+            var targetTop = targetRect.top;
+            var targetLeft = targetRect.left;
+
+            listItem.style.webkitTransition = '-webkit-transform 150ms ease-in';
+            listItem.style.MozTransition = '-moz-transform 150ms ease-in';
+            listItem.style.msTransition = '-ms-transform 150ms ease-in';
+            listItem.style.oTransition = '-o-transform 150ms ease-in';
+            listItem.style.transition = 'transform 150ms ease-in';
+
+            requestAnimationFrame(function() {
+                self.setCssLocation(listItem.style, targetLeft, targetTop);
+                setTimeout(function() {
+                    listItem.parentElement.removeChild(listItem);
+                    dropSpacer.classList.remove('beBig');
+                    dropSpacer.classList.add('beSmall');
+                    self.list.splice(insertIndex, 0, sourceItem);
+                }, 170);
+            });
+
+
+
+
+            //this.correctItemState();
+
+            //remove the item from body
         },
         initiateItemDrag: function(li, e) {
             e.preventDefault();
@@ -218,8 +246,9 @@
 
             //lets insert this guy and do a transition to
             //shrink his height
-            goAwayer.classList.remove('transition');
+            //goAwayer.classList.remove('transition');
             goAwayer.classList.add('beBig');
+            goAwayer.classList.remove('beSmall');
 
             document.body.appendChild(li);
             PolymerGestures.addEventListener(li, 'track', function(e) {
@@ -235,9 +264,9 @@
             // });
 
             requestAnimationFrame(function() {
-                goAwayer.classList.remove('beBig');
-                goAwayer.classList.add('beSmall');
-                goAwayer.classList.add('transition');
+                //goAwayer.classList.remove('beBig');
+                //goAwayer.classList.add('beSmall');
+                //goAwayer.classList.add('transition');
                 //wait a little longer than the transition
                 //and remove the spacer so as not to have
                 //duplicate spacers
