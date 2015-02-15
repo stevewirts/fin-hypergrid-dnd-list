@@ -64,6 +64,9 @@
         getRowHeights: function() {
             var bounds = this.$.ulist.getBoundingClientRect();
             var items = this.$.ulist.querySelectorAll('li.item').array();
+            if (items.length === 0) {
+                return [0];
+            }
             var boundries = items.map(function(e) {
                 return e.getBoundingClientRect().top - bounds.top;
             });
