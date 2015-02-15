@@ -208,6 +208,7 @@
                     dropSpacer.classList.remove('beBig');
                     dropSpacer.classList.add('beSmall');
                     self.list.splice(insertIndex, 0, sourceItem);
+                    self.overRow = undefined;
                 }, 170);
             });
 
@@ -219,6 +220,11 @@
             //remove the item from body
         },
         initiateItemDrag: function(li, e) {
+            this.overRow = undefined;
+            var transitions = this.$.ulist.querySelectorAll('.transition').array();
+            transitions.forEach(function(e) {
+                e.classList.remove('transition');
+            });
             e.preventDefault();
             var goAwayer = li.nextElementSibling;
             var bounds = li.getBoundingClientRect();
@@ -293,6 +299,7 @@
 
         //I no longer have a drop prospect, it has hovered over another drop prospect, correct my expansion state
         correctItemState: function() {
+            var self = this;
             var spacer = this.$.ulist.querySelector('li.spacer.beBig');
             if (spacer) {
                 requestAnimationFrame(function() {
@@ -304,10 +311,11 @@
                     //duplicate spacers
                     setTimeout(function() {
                         spacer.classList.remove('transition');
+                        self.overRow = undefined;
                     }, 210);
                 });
             }
-        }
+        },
     });
 
 })();
