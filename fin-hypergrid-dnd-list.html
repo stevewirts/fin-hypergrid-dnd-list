@@ -179,11 +179,17 @@
             this.setCssLocation(this.dragFodder.style, globalX, globalY);
 
             //lets check for a drag over....
+            //we need to make invisible briefly so as not to
+            //obscure what it's over
             this.dragFodder.style.display = 'none';
             var dropTarget = document.elementFromPoint(globalX + cxo, globalY + cyo);
             this.dragFodder.style.display = '';
+
             if (dropTarget && dropTarget.handleDragOver) {
                 if (this.currentDropTarget !== dropTarget) {
+                    if (!dropTarget.canDropItem(this.list, dropTarget.list, this.dragFodder.sourceIndex, this.dragFodder.dragItem, e)) {
+                        return;
+                    }
                     if (this.currentDropTarget) {
                         this.currentDropTarget.handleDragHoverExit(this.dragFodder, globalX + cxo, globalY + cyo);
                     }
@@ -210,15 +216,11 @@
         listItemDropped: function(listItem) {
 
             var self = this;
-            var sourceList = listItem.dragSource;
 
-            noop(listItem, sourceList);
             var dropSpacer = this.$.ulist.querySelector('li.spacer.beBig');
-
             var items = this.$.ulist.querySelectorAll('li').array();
             var sourceItem = listItem.dragItem;
             var insertIndex = items.indexOf(dropSpacer) / 2;
-
 
             var targetRect = dropSpacer.getBoundingClientRect();
             var targetTop = targetRect.top;
@@ -248,7 +250,45 @@
 
             //remove the item from body
         },
+
+        //this function can be replaced to
+        //control what can be dragged out and what cannot
+        canDragItem: function(list, item, index, e) {
+            noop(list, item, index, e);
+
+            //some examples....
+            //return list.length > 1; // 1 item must be left
+            //return item !== 'sector'; // can't remove sector
+
+            //default allow anything to be dragged out
+            return true;
+        },
+
+        //this function can be replaced to
+        //control what can be dragged out and what cannot
+        canDropItem: function(sourceList, myList, sourceIndex, item, e) {
+            noop(sourceList, myList, sourceIndex, item, e);
+
+            //some examples....
+            //return ['sector', 'gics', 'strategy'].indexOf(item) > -1; // 1 item must be left
+            //return item !== 'sector'; // can't drop sector here
+
+            //default allow anything to be dragged out
+            return true;
+        },
+
         initiateItemDrag: function(li, e) {
+
+            //let' attach the this as the drag source to
+            //the item were dragging around
+            li.dragSource = this;
+            li.dragIndex = parseInt(li.getAttribute('value'));
+            li.dragItem = this.list[li.dragIndex];
+
+            if (!this.canDragItem(this.list, li.dragItem, li.dragIndex, e)) {
+                return;
+            }
+
             this.overRow = undefined;
             var transitions = this.$.ulist.querySelectorAll('.transition').array();
             transitions.forEach(function(e) {
@@ -267,11 +307,6 @@
             //     document.body.removeChild(this.dragFodder);
             // }
 
-            //let' attach the this as the drag source to
-            //the item were dragging around
-            li.dragSource = this;
-            li.dragIndex = parseInt(li.getAttribute('value'));
-            li.dragItem = this.list[li.dragIndex];
 
             this.list.splice(li.dragIndex, 1);
 
