@@ -6,48 +6,43 @@
 
     };
     Polymer('fin-hypergrid-dnd-list', { /* jshint ignore:line  */
+        label: 'label',
+        id: 'id',
         attached: function() {
             // populate the element’s data model
             // (the salutations array)
-            this.label = this.label || 'title';
-            this.list = this.list || [
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four'
-            ];
-            // var events = [
-            //     // base events
-            //     'down',
-            //     'up',
-            //     'trackstart',
-            //     'track',
-            //     'trackend',
-            //     'tap',
-            //     'hold',
-            //     'holdpulse',
-            //     'release'
-            // ];
+            this.title = this.title || 'title';
+            this.list = this.list || [{
+                id: 0,
+                label: 'list item zero',
+            }, {
+                id: 1,
+                label: 'list item one',
+            }, {
+                id: 2,
+                label: 'list item two',
+            }, {
+                id: 3,
+                label: 'list item three',
+            }, {
+                id: 4,
+                label: 'list item four',
+            }, {
+                id: 5,
+                label: 'list item five',
+            }, {
+                id: 6,
+                label: 'list item six',
+            }, {
+                id: 7,
+                label: 'list item seven',
+            }, {
+                id: 8,
+                label: 'list item eight',
+            }, {
+                id: 9,
+                label: 'list item nine',
+            }, ];
             var parent = this.parentElement;
             var self = this;
             parent.oncontextmenu = function() {
@@ -76,8 +71,20 @@
             return boundries;
 
         },
-
-        //I've just been dragged over this is the notification
+        //these can be overriden, or the label and id values can be override
+        labelAdapter: function(item) {
+            if (typeof item === 'object') {
+                return item[this.label];
+            }
+            return item;
+        },
+        idAdapter: function(item) {
+            if (typeof item === 'object') {
+                return item[this.id];
+            }
+            return item;
+        },
+        //I've just been dragged over, this is the notification
         handleDragHoverEnter: function(dragged, x, y) {
             noop(dragged, x, y);
         },
@@ -240,6 +247,8 @@
 
         //this function can be replaced to
         //control what can be dragged out and what cannot
+        //the api could be done better given more time,
+        //but this will suffice for current needs
         canDropItem: function(sourceList, myList, sourceIndex, item, e) {
             noop(sourceList, myList, sourceIndex, item, e);
 

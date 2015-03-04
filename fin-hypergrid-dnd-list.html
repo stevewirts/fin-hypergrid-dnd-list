@@ -6,15 +6,15 @@
     <!-- <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'> -->
     <link rel="stylesheet" type="text/css" href="fin-hypergrid-dnd-list.css">
 
-        <div class="font-special toolbar dnd-header">{{label}}</div>
+        <div class="font-special toolbar dnd-header">{{title}}</div>
         <ul id="ulist" class="font-special list" touch-action="pan-y" size="3">
           <template repeat="{{item, i in list}}">
-            <li value="{{i}}_spacer" class="spacer beSmall"></li>
-            <li value="{{i}}" class="item" style="-moz-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select:none;white-space:nowrap;line-height: 46px;list-style-type: none;font-family: 'Roboto', sans-serif;border-bottom: 1px solid #e0e0e0;text-transform: capitalize;cursor: move;background-color: white;color: black;">
+            <li value="{{idAdapter(i)}}_spacer" class="spacer beSmall"></li>
+            <li value="{{idAdapter(i)}}" class="item" style="-moz-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select:none;white-space:nowrap;line-height: 46px;list-style-type: none;font-family: 'Roboto', sans-serif;border-bottom: 1px solid #e0e0e0;text-transform: capitalize;cursor: move;background-color: white;color: black;">
               <span style="font-size: 30px;color: #b6b6b6;margin: 8px;position: relative;top: 2px;cursor: move;">
                 &#11044;
               </span>
-              {{item}}
+              {{labelAdapter(item)}}
             </li>
           </template>
             <li value="last_spacer" class="spacer beSmall"></li>
@@ -32,48 +32,43 @@
 
     };
     Polymer('fin-hypergrid-dnd-list', { /* jshint ignore:line  */
+        label: 'label',
+        id: 'id',
         attached: function() {
             // populate the element’s data model
             // (the salutations array)
-            this.label = this.label || 'title';
-            this.list = this.list || [
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four',
-                'list item one',
-                'list item two',
-                'list item three',
-                'list item four'
-            ];
-            // var events = [
-            //     // base events
-            //     'down',
-            //     'up',
-            //     'trackstart',
-            //     'track',
-            //     'trackend',
-            //     'tap',
-            //     'hold',
-            //     'holdpulse',
-            //     'release'
-            // ];
+            this.title = this.title || 'title';
+            this.list = this.list || [{
+                id: 0,
+                label: 'list item zero',
+            }, {
+                id: 1,
+                label: 'list item one',
+            }, {
+                id: 2,
+                label: 'list item two',
+            }, {
+                id: 3,
+                label: 'list item three',
+            }, {
+                id: 4,
+                label: 'list item four',
+            }, {
+                id: 5,
+                label: 'list item five',
+            }, {
+                id: 6,
+                label: 'list item six',
+            }, {
+                id: 7,
+                label: 'list item seven',
+            }, {
+                id: 8,
+                label: 'list item eight',
+            }, {
+                id: 9,
+                label: 'list item nine',
+            }, ];
             var parent = this.parentElement;
             var self = this;
             parent.oncontextmenu = function() {
@@ -102,8 +97,20 @@
             return boundries;
 
         },
-
-        //I've just been dragged over this is the notification
+        //these can be overriden, or the label and id values can be override
+        labelAdapter: function(item) {
+            if (typeof item === 'object') {
+                return item[this.label];
+            }
+            return item;
+        },
+        idAdapter: function(item) {
+            if (typeof item === 'object') {
+                return item[this.id];
+            }
+            return item;
+        },
+        //I've just been dragged over, this is the notification
         handleDragHoverEnter: function(dragged, x, y) {
             noop(dragged, x, y);
         },
@@ -266,11 +273,13 @@
 
         //this function can be replaced to
         //control what can be dragged out and what cannot
+        //the api could be done better given more time,
+        //but this will suffice for current needs
         canDropItem: function(sourceList, myList, sourceIndex, item, e) {
             noop(sourceList, myList, sourceIndex, item, e);
 
             //some examples....
-            //return ['sector', 'gics', 'strategy'].indexOf(item) > -1; // 1 item must be left
+            //return ['sector', 'gics', 'strategy'].indexOf(item) > -1; // 1 item must be in this list
             //return item !== 'sector'; // can't drop sector here
 
             //default allow anything to be dragged out
