@@ -15,7 +15,7 @@
 # usage gp Polymer core-item [branch]
 # Run in a clean directory passing in a GitHub org and repo name
 
-org="openfin"
+org="stevewirts"
 repo="fin-hypergrid-dnd-list"
 branch="master" # default to master when branch isn't specified
 
