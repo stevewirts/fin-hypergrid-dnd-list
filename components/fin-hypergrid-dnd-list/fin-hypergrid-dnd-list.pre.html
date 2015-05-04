@@ -1,0 +1,24 @@
+<link rel="import" href="../polymer/polymer.html">
+<!-- <link rel="import" href="../../polymer-gestures.html"> -->
+<polymer-element name="fin-hypergrid-dnd-list" attributes="label list">
+  <template>
+    <!-- <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'> -->
+    <link rel="stylesheet" type="text/css" href="fin-hypergrid-dnd-list.css">
+
+        <div class="font-special toolbar dnd-header">{{title}}</div>
+        <ul id="ulist" class="font-special list" touch-action="pan-y" size="3">
+          <template repeat="{{item, i in list}}">
+            <li value="{{idAdapter(i)}}_spacer" class="spacer beSmall"></li>
+            <li value="{{idAdapter(i)}}" class="item" style="-moz-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select:none;white-space:nowrap;line-height: 46px;list-style-type: none;font-family: 'Roboto', sans-serif;border-bottom: 1px solid #e0e0e0;text-transform: capitalize;cursor: move;background-color: white;color: black;">
+              <span style="font-size: 30px;color: #b6b6b6;margin: 8px;position: relative;top: 2px;cursor: move;">
+                &#11044;
+              </span>
+              {{labelAdapter(item)}}
+            </li>
+          </template>
+            <li value="last_spacer" class="spacer beSmall"></li>
+        </ul>
+      </div>
+
+  </template>
+  <script>

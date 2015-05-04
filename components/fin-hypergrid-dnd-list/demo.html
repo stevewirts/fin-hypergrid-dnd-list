@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+
+    <style>
+
+    html, body {
+      background-color: white;
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+    .overlay-container {
+      border: 1px solid green;
+      box-shadow: 5px 5px 2px #888888;
+      position: relative;
+      width: 90%;
+      height: 75%;
+      background-color: #009688;
+    }
+    .column {
+      top: 5%;
+      position: absolute;
+      width: 33.3333%;
+      height: 90%;
+      white-space: nowrap;
+    }
+    .one-three {
+      left: 0%;
+    }
+    .two-three {
+      left: 33.3333%;
+    }
+    .three-three {
+      left: 66.6666%;
+    }
+    </style>
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>fin-hypergrid-dnd-list Demo</title>
+
+  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="fin-hypergrid-dnd-list.html">
+
+</head>
+<body unresolved>
+
+  <p>An example of using <code>&lt;fin-hypergrid-dnd-list></code>:</p>
+
+  <div class="overlay-container">
+      <fin-hypergrid-dnd-list id="group" class="column one-three"></fin-hypergrid-dnd-list>
+      <fin-hypergrid-dnd-list id="hidden" class="column two-three"></fin-hypergrid-dnd-list>
+      <fin-hypergrid-dnd-list id="visible" class="column three-three"></fin-hypergrid-dnd-list>
+  </div>
+
+  <script>
+
+  window.addEventListener('polymer-ready', function(){
+
+    var group = document.querySelector('#group');
+    var hidden = document.querySelector('#hidden');
+    var visible = document.querySelector('#visible');
+
+    group.title = 'groups';
+    group.list = ['sector','gics','strategy','micro','account','trader'];
+
+    hidden.title = 'hidden columns';
+    //hidden.
+    //hidden.list = ['one','two','three'];
+
+    visible.title = 'visible columns';
+    visible.list = ['pnl','mvl','lmv','smv','mpl','qpl'];
+
+
+  });
+
+
+
+
+  </script>
+</body>
+</html>
